@@ -1,24 +1,44 @@
-// Script to create a MongoDB database of house records
-conn = new Mongo();
-db = conn.getDB("houses");
-
-db.houses.drop();
-
-result = db.houses.insert({address: {street:"16576 Russell Ct", city:"San Leandro", state:"CA", zip:"94578"}, ForSale:true, size:2020, bedrooms:5, price:669000});
-
-print('Result for "insert a house with address 16576 Russell Ct, San Leandro, CA 94578 that has 2020 square feet and 5 bedrooms. It is on sale for $669,000"');
-printjson( result );
-
-// document to show below query works
-db.houses.insert({address: {street:"2000 Main St", city:"Hayward", state:"CA", zip:"94541"}, ForSale:true, size:1420, bedrooms:3, price:499000});
-
-result = db.houses.find({"address.city":"Hayward", "address.state":"CA", bedrooms:{$gte:3}, ForSale:true, price:{$lt:500000}});
-print('Result for desired houses:');
-
-// Using the code from the "Write Scripts for the mongo Shell" tutorial from doc.mongodb.org
-while ( result.hasNext() ) {
-   printjson( result.next() );
+//User Story1, As a team1 manager, I want to know each task's status of team1 (done or doing or to do)
+print("********************First:************************")
+print("task's status in team1:")
+var result1 = db.teams.find({ _id: team1 });                 //get team1 document
+var myDocument = result1.hasNext() ? result1.next() : null;
+if (myDocument) {
+    var myTasks = myDocument.tasks;                         //get team1's task array
+    myTasks.forEach(function (item) {
+        var temp = db.tasks.find({ _id: item.id }, { name: 1, status: 1, _id: 0 });     //use each taskID to find out status of each task
+        temp.forEach(printjson);
+    }
+    );
 }
 
-// Of course, at the time you are reading this, chances are the correct answer would be
-// "No such houses exist" ...
+//User Story2: As a project manager, I want to know whether the level-S bugs have already assigned to someone if so show their names.
+print()
+print("********************Second:************************")
+print("They are trying to fix the level-S bugs! Don't worry, be happy~~:")
+var result2 = db.bugs.find({ priority: "S" });                  //get level-S bug document
+while (result2.hasNext()) {
+    var myDocument = result2.next();
+    var dev = myDocument.belong;                              //get the objectID of people who are designed to this bug
+    dev.forEach(function (item) {
+        var temp = db.developers.find({ _id: item.id }, { name: 1, type: 1, _id: 0 });  //show their names accoring to objectID
+        temp.forEach(printjson);
+    }
+    );
+}
+
+//User Story3: As a project manager, I want to know which task contains the most bug, and then the manager who manages this task will be fired.
+print()
+print("********************Third:************************")
+var result3 = db.tasks.find();
+var bugNum = 0;
+var name = "";
+while (result3.hasNext()) {
+    var myDocument = result3.next();
+    var temp = myDocument.hasBugs.length;
+    if (temp > bugNum) {
+        bugNum = temp;
+        name = myDocument.manager;
+    }
+}
+print(name + ", you have the most bugs! You will be fired!!!");
