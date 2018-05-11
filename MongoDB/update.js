@@ -34,17 +34,17 @@ if (myDocument) {
     );
 }
 
-//User Story6, As a manager of team2, I found all the task's bugs have been fixed, so I want to delete all the bugs in the collection of task, and modify the status to "done".
+//User Story6, As a project manager, I want to delete task if the bug list of this task is empty and the taks has done.
 print("********************Sixth:************************")
-print("Bug list before modified:");
-result = db.bugs.find({ _id: bug6 }, { _id: 0, status: 1 });
+print("Before delete:");
+result = db.tasks.find({}, { _id: 0, name: 1, status: 1 });
 result.forEach(printjson);
-db.bugs.updateOne(
-    { _id: bug6 },
-    {
-        $set: { status: "done" },
-    }
-)
-print("Bug list after modified:");
-result = db.bugs.find({ _id: bug6 }, { _id: 0, status: 1 })
+db.tasks.deleteMany({
+    $and: [
+        { status: "done" },
+        { hasBugs: { $size: 0 } }
+    ]
+})
+print("After delete:");
+result = db.tasks.find({}, { _id: 0, name: 1, status: 1 });
 result.forEach(printjson);

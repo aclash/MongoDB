@@ -39,7 +39,7 @@ result = db.bugs.insertMany([
     { _id: bug3, belong: [{ id: developersIDs[5] }, { id: developersIDs[2] }, { id: developersIDs[6] }], priority: "B", status: "done" },
     { _id: bug4, belong: [{ id: developersIDs[9] }], priority: "C", status: "to do" },
     { _id: bug5, belong: [{ id: developersIDs[10] }], priority: "A", status: "doing" },
-    { _id: bug6, belong: [{ id: developersIDs[13] }], priority: "S", status: "doing" }
+    { _id: bug6, belong: [{ id: developersIDs[13] }], priority: "S", status: "doing" },
 ]);
 print('Result for insert all bugs.');
 printjson(result);
@@ -50,12 +50,14 @@ task2 = ObjectId()
 task3 = ObjectId()
 task4 = ObjectId()
 task5 = ObjectId()
+task6 = ObjectId()
 result = db.tasks.insertMany([
     { _id: task1, name: "task1", type: "GamePlay", hasBugs: [{ id: bug1 }, { id: bug2 }], status: "to do", manager: "Mark" },
     { _id: task2, name: "task2", type: "GameEngine", hasBugs: [{ id: bug3 }], status: "doing", manager: "Mark" },
     { _id: task3, name: "task3", type: "Network", hasBugs: [{ id: bug4 }], status: "done", manager: "neo" },
     { _id: task4, name: "task4", type: "Animation", hasBugs: [{ id: bug5 }], status: "to do", manager: "neo" },
-    { _id: task5, name: "task5", type: "UI", hasBugs: [{ id: bug6 }], status: "doing", manager: "neo" }
+    { _id: task5, name: "task5", type: "UI", hasBugs: [{ id: bug6 }], status: "doing", manager: "neo" },
+    { _id: task6, name: "task6", type: "UI", hasBugs: [], status: "done" }
 ]);
 print('Result for insert all tasks.');
 printjson(result);
