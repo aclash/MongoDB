@@ -33,10 +33,10 @@ print("********************Third:************************")
 var result3 = db.tasks.find();
 var bugNum = 0;
 var name = "";
-while (result3.hasNext()) {
+while (result3.hasNext()) {                      //traversal each bugs array of tasks document
     var myDocument = result3.next();
     var temp = myDocument.hasBugs.length;
-    if (temp > bugNum) {
+    if (temp > bugNum) {                         //compare the number of bugs, get the max count
         bugNum = temp;
         name = myDocument.manager;
     }

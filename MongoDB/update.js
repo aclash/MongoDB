@@ -1,24 +1,50 @@
-// Script to create a MongoDB database of house records
-conn = new Mongo();
-db = conn.getDB("houses");
+//User Story4, As a programmer, I fixed the bug6, so I modify this bug's status from "doing" to "done"
+print("********************Fourth:************************")
+print("Status before modified:");
+result = db.bugs.find({ _id: bug6 }, { _id: 0, status: 1 });
+result.forEach(printjson);
+db.bugs.updateOne(
+    { _id: bug6 },
+    {
+        $set: { status: "done" },
+    }
+)
+print("Status after modified:");
+result = db.bugs.find({ _id: bug6 }, { _id: 0, status: 1 })
+result.forEach(printjson);
 
-db.houses.drop();
-
-result = db.houses.insert({address: {street:"16576 Russell Ct", city:"San Leandro", state:"CA", zip:"94578"}, ForSale:true, size:2020, bedrooms:5, price:669000});
-
-print('Result for "insert a house with address 16576 Russell Ct, San Leandro, CA 94578 that has 2020 square feet and 5 bedrooms. It is on sale for $669,000"');
-printjson( result );
-
-// document to show below query works
-db.houses.insert({address: {street:"2000 Main St", city:"Hayward", state:"CA", zip:"94541"}, ForSale:true, size:1420, bedrooms:3, price:499000});
-
-result = db.houses.find({"address.city":"Hayward", "address.state":"CA", bedrooms:{$gte:3}, ForSale:true, price:{$lt:500000}});
-print('Result for desired houses:');
-
-// Using the code from the "Write Scripts for the mongo Shell" tutorial from doc.mongodb.org
-while ( result.hasNext() ) {
-   printjson( result.next() );
+//User Story5, As team2's manager, I find bug5 is difficult to fix, so I want to add two people robin and han to fix it.
+print("********************Fifth:************************")
+print("Developers' ID before adding:");
+result = db.bugs.find({ _id: bug5 }, { _id: 0, belong: 1 });
+result.forEach(printjson);
+db.bugs.updateOne(
+    { _id: bug5 },
+    { $push: { belong: { $each: [{ id: developersIDs[9] }, { id: developersIDs[12] }] } } }
+)
+print("Developers'name after adding:");
+result = db.bugs.find({ _id: bug5 }, { _id: 0, belong: 1 });
+var myDocument = result.hasNext() ? result.next() : null;
+if (myDocument) {
+    var devs = myDocument.belong;                         //get team1's task array
+    devs.forEach(function (item) {
+        var temp = db.developers.find({ _id: item.id }, { name: 1, _id: 0 });     //use each taskID to find out status of each task
+        temp.forEach(printjson);
+    }
+    );
 }
 
-// Of course, at the time you are reading this, chances are the correct answer would be
-// "No such houses exist" ...
+//User Story6, As a manager of team2, I found all the task's bugs have been fixed, so I want to delete all the bugs in the collection of task, and modify the status to "done".
+print("********************Sixth:************************")
+print("Bug list before modified:");
+result = db.bugs.find({ _id: bug6 }, { _id: 0, status: 1 });
+result.forEach(printjson);
+db.bugs.updateOne(
+    { _id: bug6 },
+    {
+        $set: { status: "done" },
+    }
+)
+print("Bug list after modified:");
+result = db.bugs.find({ _id: bug6 }, { _id: 0, status: 1 })
+result.forEach(printjson);
